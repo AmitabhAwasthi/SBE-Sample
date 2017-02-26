@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<sbe:messageSchema xmlns:sbe="http://fixprotocol.io/2016/sbe"
+                   package="com.awasthi.amitabh.sbe"
+                   id="1"
+                   version="1"
+                   semanticVersion="5.2"
+                   description="Pricing API example"
+                   byteOrder="littleEndian">
+    <types>
+        <composite name="messageHeader" description="Message identifiers and length of message root">
+            <type name="blockLength" primitiveType="uint16"/>
+            <type name="templateId" primitiveType="uint16"/>
+            <type name="schemaId" primitiveType="uint16"/>
+            <type name="version" primitiveType="uint16"/>
+        </composite>
+        <composite name="groupSizeEncoding" description="Repeating group dimensions">
+            <type name="blockLength" primitiveType="uint16"/>
+            <type name="numInGroup" primitiveType="uint16"/>
+        </composite>
+        <composite name="varDataEncoding">
+            <type name="length" primitiveType="uint32" maxValue="1073741824"/>
+            <type name="varData" primitiveType="uint8" length="0" characterEncoding="UTF-8"/>
+        </composite>
+    </types>
+
+    <types>
+        <enum name="Side" encodingType="char" semanticType="Side">
+            <validValue name="BID">B</validValue>
+            <validValue name="OFFER">O</validValue>
+        </enum>
+        <enum name="State" encodingType="char" semanticType="State">
+            <validValue name="FIRM">F</validValue>
+            <validValue name="INDICATIVE">I</validValue>
+        </enum>
+        <enum name="Market" encodingType="uint8" semanticType="Market">
+            <validValue name="EBSAI">0</validValue>
+            <validValue name="RTM">1</validValue>
+            <validValue name="CNX">2</validValue>
+            <validValue name="HSF">3</validValue>
+            <validValue name="UBS">4</validValue>
+            <validValue name="GS">5</validValue>
+            <validValue name="CMZ">6</validValue>
+            <validValue name="HSBC">7</validValue>
+            <validValue name="BARX">8</validValue>
+            <validValue name="DBK">9</validValue>
+        </enum>
+        <enum name="Instrument" encodingType="uint8" semanticType="Instrument">
+            <validValue name="EURUSD">0</validValue>
+            <validValue name="USDJPY">1</validValue>
+            <validValue name="AUDUSD">2</validValue>
+            <validValue name="GBPUSD">3</validValue>
+            <validValue name="EURCHF">4</validValue>
+            <validValue name="USDCAD">5</validValue>
+            <validValue name="NZDUSD">6</validValue>
+            <validValue name="EURSEK">7</validValue>
+            <validValue name="EURDKK">8</validValue>
+            <validValue name="EURNOK">9</validValue>
+        </enum>
+
+        <composite name="Price">
+            <ref name="side" type="Side"/>
+            <type name="amount" primitiveType="double" semanticType="amount"/>
+            <type name="price" primitiveType="double" semanticType="price"/>
+        </composite>
+
+    </types>
+    <sbe:message name="PriceSnapshot" id="1" description="Description of a PriceSnapshot object">
+        <field name="instrument" id="1" type="Instrument"/>
+        <field name="market" id="2" type="Market"/>
+        <field name="state" id="3" type="State"/>
+        <group name="prices" id="4" dimensionType="groupSizeEncoding">
+            <field name="price" id="5" type="Price"/>
+        </group>
+    </sbe:message>
+</sbe:messageSchema>
