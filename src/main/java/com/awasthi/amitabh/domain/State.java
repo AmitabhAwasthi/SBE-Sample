@@ -1,14 +1,10 @@
 package com.awasthi.amitabh.domain;
 
-import java.util.Collections;
-import java.util.EnumSet;
-import java.util.Set;
-
 public enum State {
     FIRM(false),
     INDICATIVE(true);
 
-    private boolean isIndicative;
+    private final boolean isIndicative;
 
     State(final boolean isIndicative) {
         this.isIndicative = isIndicative;
